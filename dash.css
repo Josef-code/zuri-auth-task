@@ -1,0 +1,11 @@
+
+    .container {
+        background-color: rgb(255, 254, 254);
+        width: 75%;
+        margin: auto;
+        padding: 2em;
+    }
+
+    ol {
+        font-size: 1.3em !important;
+    }

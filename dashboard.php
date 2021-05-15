@@ -1,71 +1,47 @@
 <?php
-
 require('auth_session.php');
-include('db.php');
-
-//Stores the user id in a variable
-$userid = $_SESSION['id'];
-
-// checks if the coursename was filled in the form and inserts it into the database with the user id
-if (isset($_POST['coursename'])) {
-	
-	$coursename = stripcslashes($_POST['coursename']);
-
-	$query = "INSERT INTO `courses` (course_title, user_id) VALUES ('$coursename', '$userid')";
-
-	$result = mysqli_query($con, $query);
-
-	if ($result) {
-		$successmsg ='<div class="success">Course added successfully!</div>';
-	} else {
-		$errormsg = '<div id="errormsg">Error adding course to the database, try again!</div>';
-	}
-
-}
+require('db.php');
+$user_id = $_SESSION['userid'];
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dash.css">
 </head>
 <body>
-	
-	<div class="container">
-		<h1><?php echo $_SESSION['username']; ?> , welcome to your dashboard!</h1>
-		<p>UserID: <?php echo $_SESSION['id']; ?> </br>
-		Want to leave? <a href="logout.php">Logout here</a></p>
+    <div class="container">
+        <div id="addwrapper">
+            <h1 style="text-align:left; align-items:left;">Welcome to your dashboard, <?php echo $_SESSION['username']; ?> .</h1> 
+            <a href="logout.php" style="font-size: 1.3em !important;">Logout</a></p>
+            <button style="padding: 8px; background: blue; border-radius: 9px; font-size: 1em; width: 11%;"><a href="addcourse.php" style="text-decoration: none; color: white;">Add course</a></button>
+        </div>
+            <div class="courselist">  
 
-		<?php
+                <?php
 
-			if (isset($successmsg)) {
-				echo $successmsg;
+                    // This code prints the list of courses from the database for a specific user
+                    $sql = "SELECT * FROM `courses` WHERE user_id = $user_id";
 
-			}
+                    if ($result = mysqli_query($con, $sql)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                               echo "<ul></li>" . $row['course_title'] . " || " . '<a href="editcourse.php?id=' . $row['id'] . '">Edit Course</a>' . " || " . '<a href="deletecourse.php?id=' . $row['id'] . '"> Delete Course</a>' . "</ul></li>";
+                            }
+                        }
+                    }
 
-		?>
+                    mysqli_close($con);
 
-		<!-- This section holds the add form container -->
-		<section id="formcontainer">
-			<form method="POST" id="addbox">
-				<label><h3>Course title :</h3></label>
-				<input type="text" name="coursename" placeholder="Enter course title" required>
-				<button type="submit"><strong>Add course</strong></button>
-			</form>
-		</section>
+                ?>
 
-		<!-- This section displays the courses for the user -->
-		<section id="formcontainer">
-			<?php
-
-				$sql = "SELECT * FROM `courses` WHERE id ='$userid'";
-				$output = mysqli_query($con, $sql);
-			?>
-		</section>
-	</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

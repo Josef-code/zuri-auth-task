@@ -22,6 +22,7 @@
 			// If the user is registered in the database, create a session for the user
 			if ($rows == 1) {
 				$_SESSION['username'] = $username;
+				// $_SESSION['id'] = $user_id;
 
 				//This query searches for the id of the user and stores it in a session for further use
 				$sql_query = "SELECT id FROM `users` WHERE username LIKE '$username'";
@@ -32,8 +33,9 @@
 
 				$row = mysqli_fetch_assoc($output);
 				$user_id =  $row['id'];
-				$_SESSION['id'] = $user_id;
-			 }
+				$_SESSION['userid'] = $user_id;
+			
+			}
 
 	            //Redirect to user dashboard page
 	            header("Location: dashboard.php");
