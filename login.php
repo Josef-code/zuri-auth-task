@@ -83,7 +83,7 @@
             <label style="padding-left: 15px">
             <a href="register.php">Create account</a>
             </label>
-            <span class="psw"><a href="#">Forgot password?</a></span>
+            <span class="psw"><a href="forgotpassword.php">Forgot password?</a></span>
         </div>
         </form>
     </body>
